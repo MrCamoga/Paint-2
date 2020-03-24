@@ -9,6 +9,6 @@ uniform vec2 size;
 uniform vec2 offset;
 
 void main() {
-	gl_Position = vec4(offset+pos*size, 1.0, 1.0);
+	gl_Position = vec4(offset+size*pos, 1.0, 1.0);
 	ftexcoords = texcoords;
 }

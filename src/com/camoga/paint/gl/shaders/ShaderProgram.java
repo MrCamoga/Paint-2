@@ -22,7 +22,7 @@ public abstract class ShaderProgram {
 		getUniformLocations();
 	}
 
-	public void start() { glUseProgram(programID); }
+	public void start() {glUseProgram(programID); }
 	public void stop() { glUseProgram(0); }
 	
 	public abstract void bindAttributes();	

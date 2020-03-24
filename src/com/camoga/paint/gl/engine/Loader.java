@@ -16,11 +16,12 @@ public class Loader {
 	public static ArrayList<Integer> vaos = new ArrayList<>();
 	public static ArrayList<Integer> vbos = new ArrayList<>();
 	
-	public static int loadVAO(float[] vertices) {
+	public static int loadVAO(float[] vertices, float[] tc) {
 		int vao = glGenVertexArrays();
 		vaos.add(vao);
 		glBindVertexArray(vao);
 		storeDataInAttribList(0, 2, vertices);
+		if(tc!=null) storeDataInAttribList(1, 2, tc);
 		glBindVertexArray(0);
 		return vao;
 	}

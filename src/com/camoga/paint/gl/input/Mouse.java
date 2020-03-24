@@ -24,7 +24,8 @@ public class Mouse {
 		
 		velocity = current.sub(last);
 		
-		if(!velocity.zero() && cursorInside()) {
+		if(!velocity.zero()) {
+			UIManager.getCursors().get(0).update(current.x, current.y, 0, 0);
 			MouseEvent event = null;
 			if(left[0] != 0) UIManager.onEvent(event = new MouseDraggedEvent(ButtonType.LEFT, current, left[1]));
 			if(right[0] != 0) UIManager.onEvent(event = new MouseDraggedEvent(ButtonType.RIGHT, current, right[1]));

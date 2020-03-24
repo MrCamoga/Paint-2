@@ -1,4 +1,4 @@
-package com.camoga.paint.gui;
+package com.camoga.paint.gui.components;
 
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.glDrawArrays;
@@ -7,6 +7,7 @@ import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
 import com.camoga.paint.gl.engine.Display;
+import com.camoga.paint.gl.input.Mouse;
 import com.camoga.paint.gl.input.MouseEvent;
 import com.camoga.paint.gl.input.MouseEvent.ButtonType;
 import com.camoga.paint.gl.input.MouseEvent.EventType;
@@ -32,7 +33,7 @@ public class UIButton extends UIComponent {
 		}
 	}
 	
-	private float[] bgColor = new float[] {0.3f,1,0.5f};
+	private float[] bgColor;
 	private ButtonColor color;
 	private boolean pressed;
 	
@@ -48,11 +49,15 @@ public class UIButton extends UIComponent {
 		this.x = x/1280.0f;
 		this.y = y/720.0f;
 		this.color = color;
+		bgColor = color.idle;
 	}
 	
 	public boolean onEvent(MouseEvent e) {
-		if(super.onEvent(e)) return true;
-		if(inside()) {
+		if(super.onEvent(e)) {
+			bgColor = color.idle;
+			return true;
+		}
+		if(entered) {
 			if(e.getType()==EventType.PRESSED && e.getButton() == ButtonType.LEFT) {
 				pressed = true;
 				bgColor = color.clicked;
@@ -70,21 +75,31 @@ public class UIButton extends UIComponent {
 			} else if(e.getType()==EventType.MOVED) {
 				bgColor = color.idle;				
 			}
+			return false;
 		}
-		
+
 		return true;
 	}
 
 	public void render() {
-		Display.shader.loadPanel(x+xo, y+yo, width, height, bgColor);
+		Display.shader.start();
+		Display.shader.loadPanel(x+xo, y+yo, width, height, bgColor, radius);
 		glBindVertexArray(Display.vao);
 		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDisableVertexAttribArray(1);
 		glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
+		Display.shader.stop();
 		super.render();
 	}
 
 	public void tick() {
+		super.tick();
+	}
+
+	public void setActionListener(UIActionListener action) {
+		this.action = action;		
 	}
 }
